@@ -30,6 +30,32 @@ public class General extends Enemy {
         loadDeathFrames("/enemies/general_death.png");
     }
 
+    private void loadDeathFrames(String s) {
+    }
+
+    protected void loadHurtFrames(String path) {
+        try {
+            BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
+            UtilityTool u = new UtilityTool();
+
+            int rows = 4;
+            int cols = 4; // ✅ match your general_hurt.png
+            int frameW = sheet.getWidth() / cols;
+            int frameH = sheet.getHeight() / rows;
+
+            hurtFrames = new BufferedImage[rows][cols];
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    BufferedImage sub = sheet.getSubimage(c * frameW, r * frameH, frameW, frameH);
+                    hurtFrames[r][c] = u.scaleImage(sub, gp.tileSize * 2, gp.tileSize * 2);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("⚠️ Failed to load hurtFrames: " + path);
+            e.printStackTrace();
+        }
+    }
 
 
     @Override protected void loadSprites(String walkPath, String attackPath) {

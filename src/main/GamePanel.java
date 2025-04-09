@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
     // === World ===
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public int currentWorld = 2;
+    public int currentWorld = 3;
     public boolean DEBUG_MODE = true;
 
     // === Game State ===

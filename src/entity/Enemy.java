@@ -164,67 +164,64 @@ public abstract class Enemy extends Entity {
     public void draw(Graphics2D g2) {
         if (!alive) return;
 
-        BufferedImage image = null;
-
+        BufferedImage image;
         try {
-            if (isDying && deathFrames.length > 0 && deathFrames[directionNum].length > 0) {
+            if (isDying && deathFrames[directionNum] != null) {
                 image = deathFrames[directionNum][Math.min(deathTimer / 10, deathFrames[directionNum].length - 1)];
-            } else if (isHurt && hurtFrames.length > 0 && hurtFrames[directionNum].length > 0) {
+            } else if (isHurt && hurtFrames[directionNum] != null) {
                 image = hurtFrames[directionNum][Math.min(hurtTimer / 5, hurtFrames[directionNum].length - 1)];
-            } else if (isAttacking && attackFrames.length > 0 && attackFrames[directionNum].length > 0) {
+            } else if (isAttacking) {
                 image = attackFrames[directionNum][attackFrameIndex % attackFrames[directionNum].length];
-            } else if (walkFrames.length > 0 && walkFrames[directionNum].length > 0) {
+            } else {
                 image = walkFrames[directionNum][walkFrameIndex % walkFrames[directionNum].length];
             }
         } catch (Exception e) {
-            System.err.println("⚠️ Failed to get enemy frame at direction=" + directionNum + ": " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("⚠️ Failed to get enemy frame at direction=" + directionNum + ": " + e);
+            return;
         }
-
-        if (image == null) return; // Skip drawing if image failed to load
 
         int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         g2.drawImage(image, screenX, screenY, null);
-
         g2.setColor(Color.RED);
         g2.fillRect(screenX + 32 - currentHP * 5, screenY - 10, currentHP * 10, 5);
     }
 
-
-
-
-    protected void loadHurtFrames(String path) {
+    protected void loadHurtFrames(String path, int cols, int rows) {
         try {
             BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
             UtilityTool u = new UtilityTool();
-            int frameW = 64, frameH = 64;
-            hurtFrames = new BufferedImage[4][6];
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 6; c++) {
+            int frameW = sheet.getWidth() / cols;
+            int frameH = sheet.getHeight() / rows;
+            hurtFrames = new BufferedImage[rows][cols];
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
                     BufferedImage sub = sheet.getSubimage(c * frameW, r * frameH, frameW, frameH);
                     hurtFrames[r][c] = u.scaleImage(sub, gp.tileSize * 2, gp.tileSize * 2);
                 }
             }
         } catch (Exception e) {
+            System.err.println("⚠️ Failed to load hurtFrames: " + path);
             e.printStackTrace();
         }
     }
 
-    protected void loadDeathFrames(String path) {
+    protected void loadDeathFrames(String path, int cols, int rows) {
         try {
             BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
             UtilityTool u = new UtilityTool();
-            int frameW = 64, frameH = 64;
-            deathFrames = new BufferedImage[4][6];
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 6; c++) {
+            int frameW = sheet.getWidth() / cols;
+            int frameH = sheet.getHeight() / rows;
+            deathFrames = new BufferedImage[rows][cols];
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
                     BufferedImage sub = sheet.getSubimage(c * frameW, r * frameH, frameW, frameH);
                     deathFrames[r][c] = u.scaleImage(sub, gp.tileSize * 2, gp.tileSize * 2);
                 }
             }
         } catch (Exception e) {
+            System.err.println("⚠️ Failed to load deathFrames: " + path);
             e.printStackTrace();
         }
     }
@@ -233,9 +230,6 @@ public abstract class Enemy extends Entity {
         try {
             BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
             BufferedImage[][] frames = new BufferedImage[rows][cols];
-//            if (sheet.getWidth() == 0 || sheet.getHeight() == 0) {
-//                System.err.println("❌ Warning: Loaded sprite has 0 size for " + path);
-//            }
 
             int frameW = sheet.getWidth() / cols;
             int frameH = sheet.getHeight() / rows;
@@ -257,11 +251,7 @@ public abstract class Enemy extends Entity {
         }
     }
 
-
-
     protected abstract void loadSprites(String walkPath, String attackPath);
-
-    // === Abstracts ===
     protected abstract int getWalkFrameLength();
     protected abstract int getAttackFrameLength();
     protected abstract int getAttackFrameToHit();
