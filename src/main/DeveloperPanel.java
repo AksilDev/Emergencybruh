@@ -9,7 +9,6 @@ public class DeveloperPanel extends JPanel {
 
     private final MainWindow window;
     private final ImageIcon backgroundGif;
-
     private final JLabel returnLabel;
 
     public DeveloperPanel(MainWindow window) {
@@ -19,7 +18,7 @@ public class DeveloperPanel extends JPanel {
 
         backgroundGif = new ImageIcon(getClass().getResource("/ui/dev_team.gif"));
 
-        // Return Label
+
         returnLabel = new JLabel("RETURN");
         returnLabel.setFont(new Font("Georgia", Font.BOLD, 32));
         returnLabel.setForeground(Color.BLACK);

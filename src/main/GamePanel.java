@@ -137,10 +137,7 @@ public class GamePanel extends JPanel implements Runnable {
                             if (currentWorld > 3) {
                                 saveAttempt(); //para file handling ni siya dont forget
                                 gameState = WIN_STATE;
-                                int totalSeconds = (int) ((System.currentTimeMillis() - startTime) / 1000); // you define startTime earlier
-                                int hpLeft = player.currentHP;
 
-                                util.GameStatsManager.saveAttempt(totalSeconds, hpLeft);
                             } else {
                                 worldManager.loadWorld(currentWorld);
                             }

@@ -42,7 +42,6 @@ public class MainWindow extends JFrame {
         revalidate();
         repaint();
     }
-
     public void startGame() {
         if (startMenuPanel != null) {
             startMenuPanel.stopMenuMusic();

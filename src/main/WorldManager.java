@@ -59,11 +59,10 @@ public class WorldManager {
         gp.obj[2].worldX = 41 * gp.tileSize;
         gp.obj[2].worldY = 26 * gp.tileSize;
     }
-
     public void loadWorld(int worldNum) {
         gp.currentWorld = worldNum;
-        setupWorldContent(); // Reuse your current method to set up tiles, enemies, objects, etc.
-        gp.playWorldMusic(gp.currentWorld); // Add this after setting currentWorld
+        setupWorldContent();
+        gp.playWorldMusic(gp.currentWorld);
 
 
     }

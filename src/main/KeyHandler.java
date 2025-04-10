@@ -7,11 +7,9 @@ public class KeyHandler implements KeyListener {
 
     public final GamePanel gp;
     public boolean upPressed, downPressed, leftPressed, rightPressed;
-
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
-
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();

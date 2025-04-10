@@ -8,7 +8,6 @@ public int scale = 3;
         super(gp);
         this.worldX = x;
         this.worldY = y;
-
         maxHP = 6;
         currentHP = maxHP;
         attackDamage = 2;

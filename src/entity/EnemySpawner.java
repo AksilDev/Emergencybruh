@@ -29,7 +29,6 @@ public class EnemySpawner {
         gp.enemies[0] = new Goblin(gp, 19 * gp.tileSize, 10 * gp.tileSize);
         gp.enemies[1] = new Goblin(gp, 46 * gp.tileSize, 25 * gp.tileSize);
     }
-
     private void spawnWorld2() {
         gp.enemies[0] = new Goblin(gp, 11 * gp.tileSize, 22 * gp.tileSize);
         gp.enemies[1] = new Goblin(gp, 20 * gp.tileSize, 20 * gp.tileSize);

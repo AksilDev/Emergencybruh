@@ -33,7 +33,6 @@ public class StartMenuPanel extends JPanel {
 
         playMenuMusic();
     }
-
     private void addMenuLabel(String text, int x, int y, Runnable action) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Georgia", Font.BOLD, 32));

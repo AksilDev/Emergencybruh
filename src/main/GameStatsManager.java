@@ -9,11 +9,9 @@ public class GameStatsManager {
     public static void saveAttempt(int timeSec, int hpLeft) {
         List<String> attempts = loadAttempts();
         attempts.add(String.format("Time: %ds | HP Left: %d", timeSec, hpLeft));
-
-        // Sort by time (ascending)
         attempts.sort(Comparator.comparingInt(GameStatsManager::extractTime));
 
-        // Keep only top 5
+        // Keep top 5 ra daw, ralp nag bo-ot
         while (attempts.size() > 5)
             attempts.remove(attempts.size() - 1);
 

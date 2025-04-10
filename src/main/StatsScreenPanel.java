@@ -33,7 +33,6 @@ public class StatsScreenPanel extends JPanel {
             statsList.add("No stats available.");
         }
     }
-
     private void setupReturnLabel() {
         JLabel returnLabel = new JLabel("RETURN");
         returnLabel.setFont(new Font("Georgia", Font.BOLD, 32));

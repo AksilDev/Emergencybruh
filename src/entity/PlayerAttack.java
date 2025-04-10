@@ -85,7 +85,7 @@ public class PlayerAttack {
         }
     }
 
-    // === Cooldown Logic ===
+    //skels cooldown!
 
     public float cooldownRemaining(long startTime, int cooldownMs) {
         long now = System.currentTimeMillis();

@@ -14,7 +14,6 @@ public abstract class Entity {
     public boolean isDying = false;
     protected int hurtTimer = 0;
     protected int deathTimer = 0;
-
     protected BufferedImage[][] hurtFrames;
     protected BufferedImage[][] deathFrames;
 

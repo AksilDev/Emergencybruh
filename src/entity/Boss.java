@@ -24,7 +24,6 @@ public class Boss extends Enemy {
         directionNum = 0;
 
 
-
         loadSprites("/enemies/Demon_full.png", "/enemies/Demon_attack.png");
         hurtFrames = loadSpriteSheet("/enemies/Demon_hurt.png", gp.tileSize * scale, 4, 4);
         deathFrames = loadSpriteSheet("/enemies/Demon_death.png", gp.tileSize * scale, 13, 4);
