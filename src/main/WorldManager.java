@@ -42,12 +42,12 @@ public class WorldManager {
 
     private void setupWorld2() {
         gp.obj[1] = new OBJ_Key(gp);
-        gp.obj[1].worldX = 47 * gp.tileSize;
-        gp.obj[1].worldY = 24 * gp.tileSize;
+        gp.obj[1].worldX = 46 * gp.tileSize;
+        gp.obj[1].worldY = 23 * gp.tileSize;
 
         gp.obj[2] = new OBJ_Portal(gp);
-        gp.obj[2].worldX = 49 * gp.tileSize;
-        gp.obj[2].worldY = 24 * gp.tileSize;
+        gp.obj[2].worldX = 48 * gp.tileSize;
+        gp.obj[2].worldY = 23 * gp.tileSize;
     }
 
     private void setupWorld3() {

@@ -12,109 +12,70 @@ public class StartMenuPanel extends JPanel {
     private final ImageIcon backgroundGif;
     private Clip menuMusic;
 
-    private final JLabel playLabel = new JLabel("PLAY");
-    private final JLabel exitLabel = new JLabel("EXIT");
-    private final JLabel devLabel = new JLabel("INFO");
-
     public StartMenuPanel(MainWindow window) {
         this.window = window;
 
-        setLayout(null);
         setPreferredSize(new Dimension(1584, 960));
-
+        setLayout(null);
+        setDoubleBuffered(true);
         backgroundGif = new ImageIcon(getClass().getResource("/ui/menu_background.gif"));
 
-        setupLabel(playLabel, 690, 605);
-        setupLabel(exitLabel, 690, 735);
-        setupLabel(devLabel, 690, 830);
-
-        addListeners();
-
-        add(playLabel);
-        add(exitLabel);
-        add(devLabel);
+        addMenuLabel("PLAY", 690, 605, () -> {
+            stopMenuMusic();
+            window.startGame();
+        });
+        addMenuLabel("INFO", 690, 830, window::showDeveloperPanel);
+        addMenuLabel("STATS", 110, 835, window::showStatsScreenPanel);
+        addMenuLabel("EXIT", 690, 735, () -> {
+            stopMenuMusic();
+            System.exit(0);
+        });
 
         playMenuMusic();
     }
 
-    private void setupLabel(JLabel label, int x, int y) {
-        label.setFont(new Font("Georgia", Font.BOLD, 36));
+    private void addMenuLabel(String text, int x, int y, Runnable action) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Georgia", Font.BOLD, 32));
         label.setForeground(Color.BLACK);
-        label.setBounds(x, y, 200, 50);
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
+        label.setBounds(x, y, 200, 40);
+        label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-    private void addListeners() {
-        playLabel.addMouseListener(new MouseAdapter() {
+        label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                stopMenuMusic();
-                window.startGame();
+                action.run();
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                playLabel.setForeground(Color.white);
+                label.setForeground(Color.WHITE);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                playLabel.setForeground(Color.BLACK);
+                label.setForeground(Color.BLACK);
             }
         });
 
-        exitLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                stopMenuMusic();
-                System.exit(0);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                exitLabel.setForeground(Color.white);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                exitLabel.setForeground(Color.BLACK);
-            }
-        });
-
-        devLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                window.showDeveloperPanel();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                devLabel.setForeground(Color.white);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                devLabel.setForeground(Color.BLACK);
-            }
-        });
+        add(label);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundGif.getImage(), 0, 0, getWidth(), getHeight(), null);
+        g.drawImage(backgroundGif.getImage(), 0, 0, getWidth(), getHeight(), this);
     }
 
-    private void playMenuMusic() {
+    public void playMenuMusic() {
         try {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/audio/menu_music.wav"));
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource("/audio/menu_music.wav"));
             menuMusic = AudioSystem.getClip();
             menuMusic.open(audioIn);
 
             FloatControl gainControl = (FloatControl) menuMusic.getControl(FloatControl.Type.MASTER_GAIN);
-            float volume = (float) (Math.log(0.4) / Math.log(10) * 40); // About 20 == -8dB 40 == lower abmbot kapoy math
+            float volume = (float) (Math.log(0.4) / Math.log(10) * 40);
             gainControl.setValue(volume);
 
             menuMusic.loop(Clip.LOOP_CONTINUOUSLY);

@@ -11,8 +11,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
-
-
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class GamePanel extends JPanel implements Runnable {
@@ -55,7 +55,8 @@ public class GamePanel extends JPanel implements Runnable {
     public EnemySpawner enemySpawner;
 
     Thread gameThread;
-    private Clip worldMusic;
+    public Clip worldMusic;
+    public long startTime = System.currentTimeMillis(); // dri mag sugod ang clock
 
 
 
@@ -134,7 +135,12 @@ public class GamePanel extends JPanel implements Runnable {
                         if (hasKey && areAllEnemiesDead()) {
                             currentWorld++;
                             if (currentWorld > 3) {
+                                saveAttempt(); //para file handling ni siya dont forget
                                 gameState = WIN_STATE;
+                                int totalSeconds = (int) ((System.currentTimeMillis() - startTime) / 1000); // you define startTime earlier
+                                int hpLeft = player.currentHP;
+
+                                util.GameStatsManager.saveAttempt(totalSeconds, hpLeft);
                             } else {
                                 worldManager.loadWorld(currentWorld);
                             }
@@ -206,5 +212,23 @@ public class GamePanel extends JPanel implements Runnable {
             worldMusic.close();
         }
     }
+
+    public void saveAttempt() {
+        long endTime = System.currentTimeMillis();
+        long totalTime = (endTime - startTime) / 1000; // in seconds
+        int remainingHP = player.currentHP;
+
+        String log = "Time: " + totalTime + "s | HP Left: " + remainingHP + "\n";
+
+        try {
+            FileWriter writer = new FileWriter("game_stats.txt", true); // Append mode
+            writer.write(log);
+            writer.close();
+            System.out.println("✅ Game stats saved!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
