@@ -39,6 +39,6 @@ public class EnemySpawner {
     private void spawnWorld3() {
         gp.enemies[0] = new Goblin(gp, 15 * gp.tileSize, 15 * gp.tileSize);
         gp.enemies[1] = new General(gp, 25 * gp.tileSize, 18 * gp.tileSize);
-        gp.enemies[2] = new Boss(gp, 35 * gp.tileSize, 26 * gp.tileSize);
+        gp.enemies[2] = new Boss(gp, 32 * gp.tileSize, 26 * gp.tileSize);
     }
 }

@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 
 public abstract class Enemy extends Entity {
     protected GamePanel gp;
-
     public int maxHP, currentHP, attackDamage, speed;
     public boolean alive = true;
 

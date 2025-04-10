@@ -4,14 +4,15 @@ import main.GamePanel;
 import main.UtilityTool;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Boss extends Enemy {
 
+    public int scale = 3;
     public Boss(GamePanel gp, int x, int y) {
         super(gp);
         this.worldX = x;
-        this.worldY = y;
         this.worldY = y;
 
         maxHP = 20;
@@ -21,21 +22,24 @@ public class Boss extends Enemy {
 
         direction = "down";
         directionNum = 0;
+//        int hitboxWidth = 80;
+//        int hitboxHeight = 80;
+//        int offsetX = 60;
+//        int offsetY = 160;
+
+//        solidArea = new Rectangle(offsetX, offsetY, hitboxWidth, hitboxHeight);
+
 
         loadSprites("/enemies/Demon_full.png", "/enemies/Demon_attack.png");
-//        hurtFrames = loadSpriteSheet("/enemies/Demon_hurt.png", gp.tileSize * 2 + 12, 4, 4);
-//        deathFrames = loadSpriteSheet("/enemies/Demon_death.png", gp.tileSize * 2 + 12, 13, 4);
-        hurtFrames = loadSpriteSheet("/enemies/Demon_hurt.png", gp.tileSize * 3, 4, 4);
-        deathFrames = loadSpriteSheet("/enemies/Demon_death.png", gp.tileSize * 3, 13, 4);
+        hurtFrames = loadSpriteSheet("/enemies/Demon_hurt.png", gp.tileSize * scale, 4, 4);
+        deathFrames = loadSpriteSheet("/enemies/Demon_death.png", gp.tileSize * scale, 13, 4);
     }
 
 
     @Override
     protected void loadSprites(String walkPath, String attackPath) {
-//        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * 2 + 12, 8, 4);
-//        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * 2 + 12, 10, 4);
-        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * 3, 8, 4);
-        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * 3, 10, 4);
+        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * scale, 8, 4);
+        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * scale, 10, 4);
     }
 
     protected BufferedImage[][] loadSpriteSheet(String path, int scale, int cols, int rows) {
@@ -64,6 +68,6 @@ public class Boss extends Enemy {
     @Override protected int getWalkFrameLength()    { return 6; }
     @Override protected int getAttackFrameLength()  { return 6; }
     @Override protected int getAttackFrameToHit()   { return 3; }
-    @Override protected int getAttackSpeed()        { return 9; }
+    @Override protected int getAttackSpeed()        { return 12; }
     @Override public int getDamage()                { return attackDamage; }
 }
