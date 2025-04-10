@@ -4,10 +4,16 @@ package main;
 import entity.*;
 import object.SuperObject;
 import tile.TileManager;
-import main.WorldManager;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
+
+
+
 
 public class GamePanel extends JPanel implements Runnable {
     // === Screen ===
@@ -20,7 +26,7 @@ public class GamePanel extends JPanel implements Runnable {
     // === World ===
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public int currentWorld = 3;
+    public int currentWorld = 1;
     public boolean DEBUG_MODE = true;
 
     // === Game State ===
@@ -49,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public EnemySpawner enemySpawner;
 
     Thread gameThread;
+    private Clip worldMusic;
 
 
 
@@ -63,7 +70,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.worldManager = new WorldManager(this);
         this.objectManager = new ObjectManager(this);
 
+
         worldManager.setupWorldContent();
+
+
     }
 
     public void startGameThread() {
@@ -162,4 +172,39 @@ public class GamePanel extends JPanel implements Runnable {
         }
         g2.dispose();
     }
+
+    public void playWorldMusic(int world) {
+        stopWorldMusic();
+        String path = switch (world) {
+            case 1 -> "/audio/f1_music.wav";
+            case 2 -> "/audio/f2_music.wav";
+            case 3 -> "/audio/f3_music.wav";
+            default -> null;
+        };
+
+        if (path == null) return;
+
+        try {
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource(path));
+            worldMusic = AudioSystem.getClip();
+            worldMusic.open(audioIn);
+
+
+            FloatControl gainControl = (FloatControl) worldMusic.getControl(FloatControl.Type.MASTER_GAIN);
+            float volume = (float) (Math.log(0.4) / Math.log(10) * 40);
+            gainControl.setValue(volume);
+
+            worldMusic.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopWorldMusic() {
+        if (worldMusic != null && worldMusic.isRunning()) {
+            worldMusic.stop();
+            worldMusic.close();
+        }
+    }
+
 }

@@ -7,7 +7,6 @@ import main.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Player extends Entity {
     public GamePanel gp;
@@ -31,11 +30,6 @@ public class Player extends Entity {
     public int frameIndex = 0;
     public int directionNum = 0;
     private int spriteCounter = 0;
-
-    public long specialCooldownStart = 0;
-    public long ultimateCooldownStart = 0;
-    private final int SPECIAL_COOLDOWN_MS = 4000;
-    private final int ULTIMATE_COOLDOWN_MS = 8000;
 
     public BufferedImage[][] frames;
     public BufferedImage[][] attackFrames;
@@ -214,9 +208,5 @@ public class Player extends Entity {
             e.printStackTrace();
         }
     }
-//
-//    public boolean isDying() {
-//        return isDying;
-//    }
 
 }

@@ -22,12 +22,7 @@ public class Boss extends Enemy {
 
         direction = "down";
         directionNum = 0;
-//        int hitboxWidth = 80;
-//        int hitboxHeight = 80;
-//        int offsetX = 60;
-//        int offsetY = 160;
 
-//        solidArea = new Rectangle(offsetX, offsetY, hitboxWidth, hitboxHeight);
 
 
         loadSprites("/enemies/Demon_full.png", "/enemies/Demon_attack.png");

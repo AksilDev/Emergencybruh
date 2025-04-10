@@ -63,5 +63,9 @@ public class WorldManager {
     public void loadWorld(int worldNum) {
         gp.currentWorld = worldNum;
         setupWorldContent(); // Reuse your current method to set up tiles, enemies, objects, etc.
+        gp.playWorldMusic(gp.currentWorld); // Add this after setting currentWorld
+
+
     }
+
 }

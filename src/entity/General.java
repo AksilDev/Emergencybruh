@@ -2,10 +2,8 @@ package entity;
 
 import main.GamePanel;
 
-import java.awt.image.BufferedImage;
-
 public class General extends Enemy {
-public int scale = 5;
+public int scale = 3;
     public General(GamePanel gp, int x, int y) {
         super(gp);
         this.worldX = x;
@@ -13,7 +11,7 @@ public int scale = 5;
 
         maxHP = 6;
         currentHP = maxHP;
-        attackDamage = 4;
+        attackDamage = 2;
         speed = 1;
 
         direction = "down";
