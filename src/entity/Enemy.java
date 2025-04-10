@@ -195,16 +195,18 @@ public abstract class Enemy extends Entity {
 
 
 
-    protected void loadHurtFrames(String path) {
+    protected void loadHurtFrames(String path, int cols, int rows) {
         try {
             BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
             UtilityTool u = new UtilityTool();
-            int frameW = 64, frameH = 64;
-            hurtFrames = new BufferedImage[4][6];
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 6; c++) {
+            int frameW = sheet.getWidth() / cols;
+            int frameH = sheet.getHeight() / rows;
+
+            hurtFrames = new BufferedImage[rows][cols];
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
                     BufferedImage sub = sheet.getSubimage(c * frameW, r * frameH, frameW, frameH);
-                    hurtFrames[r][c] = u.scaleImage(sub, gp.tileSize * 2, gp.tileSize * 2);
+                    hurtFrames[r][c] = u.scaleImage(sub, gp.tileSize * 2 + 12, gp.tileSize * 2 + 12);
                 }
             }
         } catch (Exception e) {
@@ -212,16 +214,18 @@ public abstract class Enemy extends Entity {
         }
     }
 
-    protected void loadDeathFrames(String path) {
+    protected void loadDeathFrames(String path, int cols, int rows) {
         try {
             BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
             UtilityTool u = new UtilityTool();
-            int frameW = 64, frameH = 64;
-            deathFrames = new BufferedImage[4][6];
-            for (int r = 0; r < 4; r++) {
-                for (int c = 0; c < 6; c++) {
+            int frameW = sheet.getWidth() / cols;
+            int frameH = sheet.getHeight() / rows;
+
+            deathFrames = new BufferedImage[rows][cols];
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
                     BufferedImage sub = sheet.getSubimage(c * frameW, r * frameH, frameW, frameH);
-                    deathFrames[r][c] = u.scaleImage(sub, gp.tileSize * 2, gp.tileSize * 2);
+                    deathFrames[r][c] = u.scaleImage(sub, gp.tileSize * 2 + 12, gp.tileSize * 2 + 12);
                 }
             }
         } catch (Exception e) {

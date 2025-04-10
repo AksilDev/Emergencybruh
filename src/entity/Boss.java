@@ -23,15 +23,19 @@ public class Boss extends Enemy {
         directionNum = 0;
 
         loadSprites("/enemies/Demon_full.png", "/enemies/Demon_attack.png");
-        hurtFrames = loadSpriteSheet("/enemies/Demon_hurt.png", gp.tileSize * 2 + 12, 4, 4);
-        deathFrames = loadSpriteSheet("/enemies/Demon_death.png", gp.tileSize * 2 + 12, 13, 4);
+//        hurtFrames = loadSpriteSheet("/enemies/Demon_hurt.png", gp.tileSize * 2 + 12, 4, 4);
+//        deathFrames = loadSpriteSheet("/enemies/Demon_death.png", gp.tileSize * 2 + 12, 13, 4);
+        hurtFrames = loadSpriteSheet("/enemies/Demon_hurt.png", gp.tileSize * 3, 4, 4);
+        deathFrames = loadSpriteSheet("/enemies/Demon_death.png", gp.tileSize * 3, 13, 4);
     }
 
 
     @Override
     protected void loadSprites(String walkPath, String attackPath) {
-        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * 2 + 12, 6, 4);
-        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * 2 + 12, 6, 4);
+//        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * 2 + 12, 8, 4);
+//        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * 2 + 12, 10, 4);
+        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * 3, 8, 4);
+        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * 3, 10, 4);
     }
 
     protected BufferedImage[][] loadSpriteSheet(String path, int scale, int cols, int rows) {
@@ -60,6 +64,6 @@ public class Boss extends Enemy {
     @Override protected int getWalkFrameLength()    { return 6; }
     @Override protected int getAttackFrameLength()  { return 6; }
     @Override protected int getAttackFrameToHit()   { return 3; }
-    @Override protected int getAttackSpeed()        { return 6; }
+    @Override protected int getAttackSpeed()        { return 9; }
     @Override public int getDamage()                { return attackDamage; }
 }

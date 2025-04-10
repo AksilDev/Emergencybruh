@@ -3,7 +3,6 @@ package entity;
 import main.GamePanel;
 
 public class EnemySpawner {
-
     private final GamePanel gp;
 
     public EnemySpawner(GamePanel gp) {
@@ -11,7 +10,7 @@ public class EnemySpawner {
     }
 
     public void spawnWorld(int world) {
-        for (int i = 0; i < gp.enemies.length; i++) gp.enemies[i] = null;
+        clearEnemies();
 
         switch (world) {
             case 1 -> spawnWorld1();
@@ -20,6 +19,11 @@ public class EnemySpawner {
         }
     }
 
+    private void clearEnemies() {
+        for (int i = 0; i < gp.enemies.length; i++) {
+            gp.enemies[i] = null;
+        }
+    }
 
     private void spawnWorld1() {
         gp.enemies[0] = new Goblin(gp, 19 * gp.tileSize, 10 * gp.tileSize);
@@ -27,15 +31,14 @@ public class EnemySpawner {
     }
 
     private void spawnWorld2() {
-        gp.enemies[0] = new Goblin(gp, 15 * gp.tileSize, 15 * gp.tileSize);
-        gp.enemies[1] = new Goblin(gp, 25 * gp.tileSize, 25 * gp.tileSize);
-        gp.enemies[2] = new General(gp, 35 * gp.tileSize, 25 * gp.tileSize);
+        gp.enemies[0] = new Goblin(gp, 11 * gp.tileSize, 22 * gp.tileSize);
+        gp.enemies[1] = new Goblin(gp, 20 * gp.tileSize, 20 * gp.tileSize);
+        gp.enemies[2] = new General(gp, 47 * gp.tileSize, 23 * gp.tileSize);
     }
 
     private void spawnWorld3() {
         gp.enemies[0] = new Goblin(gp, 15 * gp.tileSize, 15 * gp.tileSize);
-        gp.enemies[1] = new Goblin(gp, 25 * gp.tileSize, 25 * gp.tileSize);
-        gp.enemies[2] = new General(gp, 30 * gp.tileSize, 15 * gp.tileSize);
-        gp.enemies[3] = new Boss(gp, 35 * gp.tileSize, 26 * gp.tileSize);
+        gp.enemies[1] = new General(gp, 25 * gp.tileSize, 18 * gp.tileSize);
+        gp.enemies[2] = new Boss(gp, 35 * gp.tileSize, 26 * gp.tileSize);
     }
 }

@@ -214,14 +214,9 @@ public class Player extends Entity {
             e.printStackTrace();
         }
     }
+//
+//    public boolean isDying() {
+//        return isDying;
+//    }
 
-    public boolean isDying() {
-        return isDying;
-    }
-
-    public float cooldownRemaining(long startTime, int cooldownMs) {
-        long now = System.currentTimeMillis();
-        long timePassed = now - startTime;
-        return Math.max(0, (cooldownMs - timePassed) / 1000f);
-    }
 }

@@ -24,23 +24,14 @@ public class KeyHandler implements KeyListener {
 
             case KeyEvent.VK_J -> gp.player.attackHandler.startAttack();
             case KeyEvent.VK_K -> {
-                if (gp.player.attackHandler.isSpecialReady())
+                if (gp.player.attackHandler.isSpecialReady() && !gp.player.attacking)
                     gp.player.attackHandler.startSpecial();
             }
             case KeyEvent.VK_L -> {
-                if (gp.player.attackHandler.isUltimateReady())
+                if (gp.player.attackHandler.isUltimateReady() && !gp.player.attacking)
                     gp.player.attackHandler.startUltimate();
             }
-        }if(code == KeyEvent.VK_K && !gp.player.usingSpecial && !gp.player.attacking) {
-            gp.player.startSpecial();
         }
-
-        if(code == KeyEvent.VK_L && !gp.player.usingUltimate && !gp.player.attacking) {
-            gp.player.startUltimate();
-        }
-
-
-
     }
 
     @Override
