@@ -24,9 +24,9 @@ public class StartMenuPanel extends JPanel {
             stopMenuMusic();
             window.startGame();
         });
-        addMenuLabel("INFO", 690, 830, window::showDeveloperPanel);
-        addMenuLabel("STATS", 110, 835, window::showStatsScreenPanel);
-        addMenuLabel("EXIT", 690, 735, () -> {
+        addMenuLabel("INFO", 690, 840, window::showDeveloperPanel);
+        addMenuLabel("STATS", 120, 840, window::showStatsScreenPanel);
+        addMenuLabel("EXIT", 690, 740, () -> {
             stopMenuMusic();
             System.exit(0);
         });
@@ -35,7 +35,7 @@ public class StartMenuPanel extends JPanel {
     }
     private void addMenuLabel(String text, int x, int y, Runnable action) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Georgia", Font.BOLD, 32));
+        label.setFont(new Font("Georgia", Font.BOLD, 35));
         label.setForeground(Color.BLACK);
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setBounds(x, y, 200, 40);
@@ -44,7 +44,11 @@ public class StartMenuPanel extends JPanel {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                action.run();
+                if (text.equals("PLAY")) {
+                    window.showNamePromptPanel(); // ✅ Only show name prompt when "PLAY" is clicked
+                } else {
+                    action.run(); // STATS, INFO, EXIT
+                }
             }
 
             @Override
@@ -60,6 +64,7 @@ public class StartMenuPanel extends JPanel {
 
         add(label);
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {

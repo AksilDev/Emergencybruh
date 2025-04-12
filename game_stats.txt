@@ -1,1 +1,5 @@
-Time: 133s | HP Left: 2
+Marbil,52.166,9
+ImGroot,54.123,8
+PureChaos,60.446,10
+ralp,64.033,2
+raymart,64.728,9

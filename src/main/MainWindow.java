@@ -4,8 +4,11 @@ import javax.swing.*;
 
 public class MainWindow extends JFrame {
     private StartMenuPanel startMenuPanel;
+    private NamePromptPanel namePromptPanel;
 
     public MainWindow() {
+        namePromptPanel = new NamePromptPanel(this);
+
         setTitle("Monarch's Descent");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
@@ -14,6 +17,7 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
+
 
     public void showStartMenu() {
         if (startMenuPanel != null) {
@@ -30,6 +34,13 @@ public class MainWindow extends JFrame {
             startMenuPanel.stopMenuMusic();
         }
         setContentPane(new DeveloperPanel(this));
+        revalidate();
+        repaint();
+    }
+
+
+    public void showNamePromptPanel() {
+        setContentPane(namePromptPanel);
         revalidate();
         repaint();
     }
@@ -54,4 +65,11 @@ public class MainWindow extends JFrame {
         gamePanel.requestFocusInWindow();
         gamePanel.startGameThread();
     }
+    public void showNamePrompt() {
+        setContentPane(namePromptPanel);
+        revalidate();
+        repaint();
+    }
+
+
 }

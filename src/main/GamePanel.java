@@ -3,6 +3,7 @@ package main;
 
 import entity.*;
 import object.SuperObject;
+import run.RunManager;
 import tile.TileManager;
 
 import javax.sound.sampled.AudioInputStream;
@@ -57,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     public Clip worldMusic;
     public long startTime = System.currentTimeMillis(); // dri mag sugod ang clock
+    public long runStartTime;
 
 
 
@@ -66,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        startTime = System.currentTimeMillis();
 
         this.enemySpawner = new EnemySpawner(this);
         this.worldManager = new WorldManager(this);
@@ -120,7 +123,8 @@ public class GamePanel extends JPanel implements Runnable {
                 player.worldX + player.solidArea.x,
                 player.worldY + player.solidArea.y,
                 player.solidArea.width,
-                player.solidArea.height);
+                player.solidArea.height
+        );
 
         for (int i = 0; i < obj.length; i++) {
             SuperObject object = obj[i];
@@ -130,25 +134,29 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (playerArea.intersects(objArea)) {
                 switch (object.name) {
-                    case "Key" -> { hasKey = true; obj[i] = null; }
+                    case "Key" -> {
+                        hasKey = true;
+                        obj[i] = null;
+                    }
                     case "Portal" -> {
                         if (hasKey && areAllEnemiesDead()) {
                             currentWorld++;
                             if (currentWorld > 3) {
-                                saveAttempt(); //para file handling ni siya dont forget
+                                double totalTimeSec = (System.currentTimeMillis() - startTime) / 1000.0;
+                                int hpLeft = player.currentHP;
+                                RunManager.getInstance().trySaveRun(totalTimeSec, hpLeft);
                                 gameState = WIN_STATE;
-
                             } else {
                                 worldManager.loadWorld(currentWorld);
                             }
                         }
                     }
                     case "Heart" -> obj[i] = null;
-
                 }
             }
         }
     }
+
 
 
     public boolean areAllEnemiesDead() {
