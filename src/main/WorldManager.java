@@ -63,8 +63,6 @@ public class WorldManager {
         gp.currentWorld = worldNum;
         setupWorldContent();
         gp.playWorldMusic(gp.currentWorld);
-
-
     }
 
 }

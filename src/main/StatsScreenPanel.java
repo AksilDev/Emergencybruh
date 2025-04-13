@@ -19,13 +19,16 @@ public class StatsScreenPanel extends JPanel {
         this.window = window;
         setLayout(null);
         setPreferredSize(new Dimension(1584, 960));
+
+        // Play background music
+        MusicManager.getInstance().playMenuMusic();
+
         background = new ImageIcon(getClass().getResource("/ui/Stats.gif")).getImage();
         medal1 = new ImageIcon(getClass().getResource("/ui/medal_1st.png")).getImage();
         medal2 = new ImageIcon(getClass().getResource("/ui/medal_2nd.png")).getImage();
         medal3 = new ImageIcon(getClass().getResource("/ui/medal_3rd.png")).getImage();
         heartFull = new ImageIcon(getClass().getResource("/objects/full.png")).getImage();
         heartHalf = new ImageIcon(getClass().getResource("/objects/half.png")).getImage();
-
 
         setupReturnLabel();
     }
@@ -39,6 +42,7 @@ public class StatsScreenPanel extends JPanel {
         returnLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                MusicManager.getInstance().stopMenuMusic(); // optional
                 window.showStartMenu();
             }
         });
@@ -59,14 +63,12 @@ public class StatsScreenPanel extends JPanel {
             RunRecord record = topRuns.get(i);
             int x = 600;
 
-            // Draw Medal
             if (i == 0) g2.drawImage(medal1, x - 60, y - 30, 40, 40, this);
             else if (i == 1) g2.drawImage(medal2, x - 60, y - 30, 40, 40, this);
             else if (i == 2) g2.drawImage(medal3, x - 60, y - 30, 40, 40, this);
 
             String line = String.format("#%d. %s - %.2f sec", i + 1, record.getName(), record.getTime());
             g2.drawString(line, x, y);
-
 
             int hp = record.getHp();
             int fullHearts = hp / 2;

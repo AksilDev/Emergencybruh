@@ -3,8 +3,10 @@ package main;
 import javax.swing.*;
 
 public class MainWindow extends JFrame {
+
     private StartMenuPanel startMenuPanel;
     private NamePromptPanel namePromptPanel;
+    private GamePanel gamePanel;
 
     public MainWindow() {
         namePromptPanel = new NamePromptPanel(this);
@@ -18,11 +20,8 @@ public class MainWindow extends JFrame {
         setVisible(true);
     }
 
-
     public void showStartMenu() {
-        if (startMenuPanel != null) {
-            startMenuPanel.stopMenuMusic();
-        }
+        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
         startMenuPanel = new StartMenuPanel(this);
         setContentPane(startMenuPanel);
         revalidate();
@@ -30,14 +29,11 @@ public class MainWindow extends JFrame {
     }
 
     public void showDeveloperPanel() {
-        if (startMenuPanel != null) {
-            startMenuPanel.stopMenuMusic();
-        }
+        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
         setContentPane(new DeveloperPanel(this));
         revalidate();
         repaint();
     }
-
 
     public void showNamePromptPanel() {
         setContentPane(namePromptPanel);
@@ -46,18 +42,18 @@ public class MainWindow extends JFrame {
     }
 
     public void showStatsScreenPanel() {
-        if (startMenuPanel != null) {
-            startMenuPanel.stopMenuMusic();
-        }
+        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
         setContentPane(new StatsScreenPanel(this));
         revalidate();
         repaint();
     }
+
     public void startGame() {
-        if (startMenuPanel != null) {
-            startMenuPanel.stopMenuMusic();
-        }
-        GamePanel gamePanel = new GamePanel();
+        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
+
+        gamePanel = new GamePanel();
+        gamePanel.setWindow(this);
+
         setContentPane(gamePanel);
         revalidate();
         repaint();
@@ -65,11 +61,17 @@ public class MainWindow extends JFrame {
         gamePanel.requestFocusInWindow();
         gamePanel.startGameThread();
     }
-    public void showNamePrompt() {
-        setContentPane(namePromptPanel);
+
+    public void showVictoryPanel() {
+        stopGameMusic(); // just to be safe
+        setContentPane(new VictoryPanel(this));
         revalidate();
         repaint();
     }
 
-
+    public void stopGameMusic() {
+        if (gamePanel != null) {
+            gamePanel.stopWorldMusic();
+        }
+    }
 }

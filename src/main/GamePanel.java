@@ -1,4 +1,3 @@
-// ===== Final GamePanel.java =====
 package main;
 
 import entity.*;
@@ -6,61 +5,44 @@ import object.SuperObject;
 import run.RunManager;
 import tile.TileManager;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileWriter;
-import java.io.IOException;
-
 
 public class GamePanel extends JPanel implements Runnable {
-    // === Screen ===
     public final int tileSize = 16 * 3;
     public final int maxScreenCol = 33;
     public final int maxScreenRow = 20;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
-
-    // === World ===
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public int currentWorld = 1;
-    public boolean DEBUG_MODE = true;
+    public int currentWorld = 3;
 
-    // === Game State ===
     public static final int PLAY_STATE = 0;
     public static final int DEATH_STATE = 1;
     public static final int WIN_STATE = 2;
     public int gameState = PLAY_STATE;
 
-    // === Managers ===
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public WorldManager worldManager = new WorldManager(this);
     public ObjectManager objectManager = new ObjectManager(this);
+    public EnemySpawner enemySpawner = new EnemySpawner(this);
 
-
-
-    // === Game Entities ===
     public Player player = new Player(this, keyH);
     public Enemy[] enemies = new Enemy[10];
     public SuperObject[] obj = new SuperObject[20];
 
-    // === UI ===
     public UI ui = new UI(this);
     public boolean hasKey = false;
-    public EnemySpawner enemySpawner;
 
     Thread gameThread;
     public Clip worldMusic;
-    public long startTime = System.currentTimeMillis(); // dri mag sugod ang clock
-    public long runStartTime;
+    public long startTime = System.currentTimeMillis();
 
-
+    private MainWindow window;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -70,14 +52,12 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         startTime = System.currentTimeMillis();
 
-        this.enemySpawner = new EnemySpawner(this);
-        this.worldManager = new WorldManager(this);
-        this.objectManager = new ObjectManager(this);
+        worldManager.setupWorldContent();      // 🔁 Load initial world content
+        playWorldMusic(currentWorld);          // ✅ Ensure world1 music plays immediately
+    }
 
-
-        worldManager.setupWorldContent();
-
-
+    public void setWindow(MainWindow window) {
+        this.window = window;
     }
 
     public void startGameThread() {
@@ -146,6 +126,9 @@ public class GamePanel extends JPanel implements Runnable {
                                 int hpLeft = player.currentHP;
                                 RunManager.getInstance().trySaveRun(totalTimeSec, hpLeft);
                                 gameState = WIN_STATE;
+                                if (window != null) {
+                                    SwingUtilities.invokeLater(() -> window.showVictoryPanel());
+                                }
                             } else {
                                 worldManager.loadWorld(currentWorld);
                             }
@@ -157,8 +140,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-
-
     public boolean areAllEnemiesDead() {
         for (Enemy e : enemies) if (e != null && e.alive) return false;
         return true;
@@ -169,19 +150,21 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         tileM.draw(g2);
-        for (SuperObject o : obj) if (o != null) o.draw(g2, o.worldX - player.worldX + player.screenX, o.worldY - player.worldY + player.screenY, tileSize);
+        for (SuperObject o : obj) if (o != null)
+            o.draw(g2, o.worldX - player.worldX + player.screenX, o.worldY - player.worldY + player.screenY, tileSize);
         for (Enemy e : enemies) if (e != null) e.draw(g2);
         player.draw(g2);
         if (gameState == DEATH_STATE) ui.drawDeathScreen(g2);
         else ui.draw(g2);
-        if (gameState == WIN_STATE) {
-            g2.setFont(new Font("Arial", Font.BOLD, 60));
-            g2.setColor(Color.YELLOW);
-            String msg = "You Win!";
-            int msgWidth = g2.getFontMetrics().stringWidth(msg);
-            g2.drawString(msg, screenWidth / 2 - msgWidth / 2, screenHeight / 2);
-        }
         g2.dispose();
+    }
+
+    public void handleDeathRestart() {
+        currentWorld = 1;
+        hasKey = false;
+        player.setDefaultValues();
+        worldManager.loadWorld(currentWorld);
+        gameState = PLAY_STATE;
     }
 
     public void playWorldMusic(int world) {
@@ -199,12 +182,9 @@ public class GamePanel extends JPanel implements Runnable {
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource(path));
             worldMusic = AudioSystem.getClip();
             worldMusic.open(audioIn);
-
-
             FloatControl gainControl = (FloatControl) worldMusic.getControl(FloatControl.Type.MASTER_GAIN);
             float volume = (float) (Math.log(0.4) / Math.log(10) * 40);
             gainControl.setValue(volume);
-
             worldMusic.loop(Clip.LOOP_CONTINUOUSLY);
         } catch (Exception e) {
             e.printStackTrace();
@@ -217,23 +197,4 @@ public class GamePanel extends JPanel implements Runnable {
             worldMusic.close();
         }
     }
-
-    public void saveAttempt() {
-        long endTime = System.currentTimeMillis();
-        long totalTime = (endTime - startTime) / 1000; // in seconds
-        int remainingHP = player.currentHP;
-
-        String log = "Time: " + totalTime + "s | HP Left: " + remainingHP + "\n";
-
-        try {
-            FileWriter writer = new FileWriter("game_stats.txt", true); // Append mode
-            writer.write(log);
-            writer.close();
-            System.out.println("✅ Game stats saved!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }

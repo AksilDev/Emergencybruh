@@ -18,6 +18,8 @@ public class DeveloperPanel extends JPanel {
 
         backgroundGif = new ImageIcon(getClass().getResource("/ui/dev_team.gif"));
 
+        // Start menu music here
+        MusicManager.getInstance().playMenuMusic();
 
         returnLabel = new JLabel("RETURN");
         returnLabel.setFont(new Font("Georgia", Font.BOLD, 32));
@@ -29,6 +31,7 @@ public class DeveloperPanel extends JPanel {
         returnLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                MusicManager.getInstance().stopMenuMusic();  // stop music only if needed
                 window.showStartMenu();
             }
 
@@ -47,6 +50,6 @@ public class DeveloperPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundGif.getImage(), 0, 0, getWidth(), getHeight(), this); // scaled GIF
+        g.drawImage(backgroundGif.getImage(), 0, 0, getWidth(), getHeight(), this);
     }
 }

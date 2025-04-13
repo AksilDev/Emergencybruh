@@ -1,16 +1,13 @@
 package main;
 
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class StartMenuPanel extends JPanel {
-
     private final MainWindow window;
     private final ImageIcon backgroundGif;
-    private Clip menuMusic;
 
     public StartMenuPanel(MainWindow window) {
         this.window = window;
@@ -20,19 +17,14 @@ public class StartMenuPanel extends JPanel {
         setDoubleBuffered(true);
         backgroundGif = new ImageIcon(getClass().getResource("/ui/menu_background.gif"));
 
-        addMenuLabel("PLAY", 690, 605, () -> {
-            stopMenuMusic();
-            window.startGame();
-        });
+        addMenuLabel("PLAY", 690, 605, window::showNamePromptPanel);
         addMenuLabel("INFO", 690, 840, window::showDeveloperPanel);
         addMenuLabel("STATS", 120, 840, window::showStatsScreenPanel);
-        addMenuLabel("EXIT", 690, 740, () -> {
-            stopMenuMusic();
-            System.exit(0);
-        });
+        addMenuLabel("EXIT", 690, 740, () -> System.exit(0));
 
-        playMenuMusic();
+        MusicManager.getInstance().playMusic("/audio/menu_music.wav");
     }
+
     private void addMenuLabel(String text, int x, int y, Runnable action) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Georgia", Font.BOLD, 35));
@@ -44,11 +36,7 @@ public class StartMenuPanel extends JPanel {
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (text.equals("PLAY")) {
-                    window.showNamePromptPanel(); // ✅ Only show name prompt when "PLAY" is clicked
-                } else {
-                    action.run(); // STATS, INFO, EXIT
-                }
+                action.run();
             }
 
             @Override
@@ -65,33 +53,9 @@ public class StartMenuPanel extends JPanel {
         add(label);
     }
 
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundGif.getImage(), 0, 0, getWidth(), getHeight(), this);
-    }
-
-    public void playMenuMusic() {
-        try {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource("/audio/menu_music.wav"));
-            menuMusic = AudioSystem.getClip();
-            menuMusic.open(audioIn);
-
-            FloatControl gainControl = (FloatControl) menuMusic.getControl(FloatControl.Type.MASTER_GAIN);
-            float volume = (float) (Math.log(0.4) / Math.log(10) * 40);
-            gainControl.setValue(volume);
-
-            menuMusic.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void stopMenuMusic() {
-        if (menuMusic != null && menuMusic.isRunning()) {
-            menuMusic.stop();
-            menuMusic.close();
-        }
     }
 }

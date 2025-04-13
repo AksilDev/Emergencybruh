@@ -7,9 +7,11 @@ public class KeyHandler implements KeyListener {
 
     public final GamePanel gp;
     public boolean upPressed, downPressed, leftPressed, rightPressed;
+
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
+
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
@@ -28,6 +30,15 @@ public class KeyHandler implements KeyListener {
             case KeyEvent.VK_L -> {
                 if (gp.player.attackHandler.isUltimateReady() && !gp.player.attacking)
                     gp.player.attackHandler.startUltimate();
+            }
+
+            case KeyEvent.VK_ENTER -> {
+                if (gp.gameState == GamePanel.DEATH_STATE) {
+                    gp.currentWorld = 1;
+                    gp.player.currentHP = gp.player.maxHP;
+                    gp.worldManager.loadWorld(1);
+                    gp.gameState = GamePanel.PLAY_STATE;
+                }
             }
         }
     }
