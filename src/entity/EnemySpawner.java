@@ -27,7 +27,9 @@ public class EnemySpawner {
 
     private void spawnWorld1() {
         gp.enemies[0] = new Goblin(gp, 19 * gp.tileSize, 10 * gp.tileSize);
-        gp.enemies[1] = new Goblin(gp, 46 * gp.tileSize, 25 * gp.tileSize);
+        gp.enemies[1] = new Goblin(gp, 19 * gp.tileSize, 10 * gp.tileSize);
+        gp.enemies[2] = new Goblin(gp, 46 * gp.tileSize, 25 * gp.tileSize);
+        gp.enemies[3] = new Goblin(gp, 46 * gp.tileSize, 25 * gp.tileSize);
     }
     private void spawnWorld2() {
         gp.enemies[0] = new Goblin(gp, 11 * gp.tileSize, 22 * gp.tileSize);
@@ -37,7 +39,8 @@ public class EnemySpawner {
 
     private void spawnWorld3() {
         gp.enemies[0] = new Goblin(gp, 15 * gp.tileSize, 15 * gp.tileSize);
-        gp.enemies[1] = new General(gp, 21 * gp.tileSize, 18 * gp.tileSize);
-        gp.enemies[2] = new Boss(gp, 28 * gp.tileSize, 26 * gp.tileSize);
+        gp.enemies[1] = new Goblin(gp, 17 * gp.tileSize, 16 * gp.tileSize);
+        gp.enemies[4] = new General(gp, 23 * gp.tileSize, 22 * gp.tileSize);
+        gp.enemies[5] = new Boss(gp, 25 * gp.tileSize, 24 * gp.tileSize);
     }
 }

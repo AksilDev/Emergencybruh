@@ -1,7 +1,5 @@
 package main;
 
-import object.*;
-import main.GamePanel;
 
 public class ObjectManager {
 

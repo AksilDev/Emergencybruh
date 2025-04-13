@@ -3,6 +3,7 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -62,6 +63,11 @@ public class Player extends Entity {
 
         loadHurtFrames("/player/orc_hurt.png");
         loadDeathFrames("/player/orc_death.png");
+    }
+
+    @Override
+    public GamePanel getGamePanel() {
+        return gp;
     }
 
     public void setDefaultValues() {
@@ -125,7 +131,6 @@ public class Player extends Entity {
 
         g2.drawImage(image, screenX, screenY, null);
     }
-
 
     public void takeDamage(int damage) {
         currentHP -= damage;
@@ -207,5 +212,4 @@ public class Player extends Entity {
             e.printStackTrace();
         }
     }
-
 }

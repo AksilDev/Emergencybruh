@@ -23,7 +23,7 @@ public class MusicManager {
         try {
             URL url = getClass().getResource(path);
             if (url == null) {
-                System.err.println("❌ Could not find audio file: " + path);
+                System.err.println("not find audio file: " + path);
                 return;
             }
 

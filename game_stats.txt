@@ -1,5 +1,2 @@
-Malenia,11.87,10
-Malenia,12.474,10
-Judge,12.796,10
-Testing#26,13.423,10
-Jury,13.621,10
+Tarnished,59.62,20
+Ryzen,99.221,4

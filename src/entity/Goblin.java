@@ -11,6 +11,7 @@ public class Goblin extends Enemy {
 
     public Goblin(GamePanel gp, int worldX, int worldY) {
         super(gp);
+        this.name = "Krikksses";
         this.worldX = worldX;
         this.worldY = worldY;
 
@@ -59,7 +60,7 @@ public class Goblin extends Enemy {
     @Override protected int getAttackFrameLength() { return 4; }
     @Override protected int getAttackFrameToHit() { return 2; }
     @Override protected int getAttackSpeed() { return 10; }
-    @Override public int getDamage() { return attackDamage; }
+     public int getDamage() { return attackDamage; }
 
     // Optional: override draw to skip hurt/death logic since they don’t exist
     @Override

@@ -1,15 +1,20 @@
 package entity;
 
 import main.GamePanel;
+import main.UtilityTool;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 public class General extends Enemy {
-public int scale = 3;
+    private final int scale = 3;
+
     public General(GamePanel gp, int x, int y) {
         super(gp);
+        this.name = "Zarvok";
         this.worldX = x;
         this.worldY = y;
-        maxHP = 6;
-        currentHP = maxHP;
+
+        maxHP = currentHP = 8;
         attackDamage = 2;
         speed = 1;
 
@@ -19,24 +24,40 @@ public int scale = 3;
         solidArea.setBounds(8, 16, 60, 60);
 
         loadSprites("/enemies/general_full.png", "/enemies/general_attack.png");
-        hurtFrames = loadSpriteSheet("/enemies/general_hurt.png", gp.tileSize * scale, 4, 4);   // 256x256
-        deathFrames = loadSpriteSheet("/enemies/general_death.png",gp.tileSize * scale, 6, 4); // 384x256
-
+        hurtFrames = loadSpriteSheet("/enemies/general_hurt.png", gp.tileSize * scale, 4, 4);
+        deathFrames = loadSpriteSheet("/enemies/general_death.png", gp.tileSize * scale, 6, 4);
     }
 
     @Override
     protected void loadSprites(String walkPath, String attackPath) {
-        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * scale, 8, 4);   // 512x256 = 8 cols
-        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * scale, 9, 4); // 576x256 = 9 cols
+        walkFrames = loadSpriteSheet(walkPath, gp.tileSize * scale, 8, 4);
+        attackFrames = loadSpriteSheet(attackPath, gp.tileSize * scale, 9, 4);
     }
 
-    @Override
-    public int getDamage() {
-        return attackDamage;
+    // ✅ This method was missing! Paste this exactly here:
+    protected BufferedImage[][] loadSpriteSheet(String path, int scale, int cols, int rows) {
+        try {
+            BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
+            BufferedImage[][] frames = new BufferedImage[rows][cols];
+            int frameW = sheet.getWidth() / cols;
+            int frameH = sheet.getHeight() / rows;
+            UtilityTool u = new UtilityTool();
+
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    BufferedImage sub = sheet.getSubimage(c * frameW, r * frameH, frameW, frameH);
+                    frames[r][c] = u.scaleImage(sub, scale, scale);
+                }
+            }
+            return frames;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BufferedImage[0][0];
+        }
     }
 
-    @Override protected int getWalkFrameLength()     { return 8; }
-    @Override protected int getAttackFrameLength()   { return 9; }
-    @Override protected int getAttackFrameToHit()    { return 4; }
-    @Override protected int getAttackSpeed()         { return 15; }
+    @Override protected int getWalkFrameLength()   { return 8; }
+    @Override protected int getAttackFrameLength() { return 9; }
+    @Override protected int getAttackFrameToHit()  { return 4; }
+    @Override protected int getAttackSpeed()       { return 15; }
 }

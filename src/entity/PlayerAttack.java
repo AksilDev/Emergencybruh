@@ -9,6 +9,9 @@ public class PlayerAttack {
     public long specialCooldownStart = 0;
     public long ultimateCooldownStart = 0;
 
+    private boolean basicOnCooldown = false;
+    private int basicCooldownTimer = 0;
+    private final int BASIC_COOLDOWN_DURATION = 60; // 1 second
     private final int SPECIAL_COOLDOWN_MS = 4000;
     private final int ULTIMATE_COOLDOWN_MS = 8000;
 
@@ -17,6 +20,16 @@ public class PlayerAttack {
     }
 
     public boolean updateAttack() {
+        // Handle cooldown countdown every frame
+        if (basicOnCooldown) {
+            basicCooldownTimer++;
+            if (basicCooldownTimer >= BASIC_COOLDOWN_DURATION) {
+                basicOnCooldown = false;
+                basicCooldownTimer = 0;
+            }
+        }
+
+        // Active attacks
         if (player.attacking) {
             handle(player.attackFrames, 1);
             return true;
@@ -50,6 +63,11 @@ public class PlayerAttack {
                 player.usingSpecial = false;
                 player.usingUltimate = false;
                 player.alreadyHit = false;
+
+                // ✅ Start cooldown if it was a basic attack
+                if (!player.usingSpecial && !player.usingUltimate) {
+                    basicOnCooldown = true;
+                }
             }
         }
     }
@@ -84,8 +102,11 @@ public class PlayerAttack {
             }
         }
     }
+    public float getBasicCooldownRemaining() {
+        if (!basicOnCooldown) return 0;
+        return (BASIC_COOLDOWN_DURATION - basicCooldownTimer) / 60f;
+    }
 
-    //skels cooldown!
 
     public float cooldownRemaining(long startTime, int cooldownMs) {
         long now = System.currentTimeMillis();
@@ -101,7 +122,13 @@ public class PlayerAttack {
         return System.currentTimeMillis() - ultimateCooldownStart >= ULTIMATE_COOLDOWN_MS;
     }
 
+    public boolean isBasicReady() {
+        return !basicOnCooldown;
+    }
+
     public void startAttack() {
+        if (basicOnCooldown) return; // ⛔ Block attack if still cooling down
+
         player.attacking = true;
         player.attackFrameIndex = 0;
         player.attackTimer = 0;
