@@ -31,7 +31,7 @@ public class DeveloperPanel extends JPanel {
         returnLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                MusicManager.getInstance().stopMenuMusic();  // stop music only if needed
+                MusicManager.getInstance().stopMusic();
                 window.showStartMenu();
             }
 

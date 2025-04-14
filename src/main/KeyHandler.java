@@ -33,13 +33,16 @@ public class KeyHandler implements KeyListener {
             }
 
             case KeyEvent.VK_ENTER -> {
-                if (gp.gameState == GamePanel.DEATH_STATE) {
+                if (gp.gameState == GamePanel.DIALOGUE_STATE) {
+                    gp.dialogueManager.nextLine();
+                }else if (gp.gameState == GamePanel.DEATH_STATE) {
                     gp.currentWorld = 1;
                     gp.player.currentHP = gp.player.maxHP;
                     gp.worldManager.loadWorld(1);
                     gp.gameState = GamePanel.PLAY_STATE;
                 }
             }
+
         }
     }
 

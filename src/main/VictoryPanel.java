@@ -15,10 +15,9 @@ public class VictoryPanel extends JPanel {
         setPreferredSize(new Dimension(1584, 960));
         setBackground(Color.BLACK);
 
-        // 🎵 Play victory music
-        MusicManager.getInstance().playMusic("/audio/victory_theme.wav");
+        MusicManager.getInstance().stop(); // Clear lingering music
+        MusicManager.getInstance().playVictoryMusic();
 
-        // 🟢 Redo Button
         JLabel redoBtn = new JLabel("REDO");
         redoBtn.setFont(new Font("Georgia", Font.BOLD, 32));
         redoBtn.setForeground(Color.WHITE);
@@ -31,9 +30,8 @@ public class VictoryPanel extends JPanel {
                 window.showStartMenu();
             }
         });
-        add(redoBtn); // Add BEFORE background so it's on top
+        add(redoBtn);
 
-        // 🟢 Exit Button
         JLabel exitBtn = new JLabel("EXIT");
         exitBtn.setFont(new Font("Georgia", Font.BOLD, 32));
         exitBtn.setForeground(Color.WHITE);
@@ -46,13 +44,12 @@ public class VictoryPanel extends JPanel {
                 System.exit(0);
             }
         });
-        add(exitBtn); // Add BEFORE background so it's on top
+        add(exitBtn);
 
-        // 🔻 Background GIF (Add LAST and send to back)
         victoryGif = new ImageIcon(getClass().getResource("/ui/victory.gif"));
         JLabel gifLabel = new JLabel(victoryGif);
         gifLabel.setBounds(0, 0, 1584, 960);
         add(gifLabel);
-        setComponentZOrder(gifLabel, getComponentCount() - 1); // push background to back
+        setComponentZOrder(gifLabel, getComponentCount() - 1); // send to back
     }
 }

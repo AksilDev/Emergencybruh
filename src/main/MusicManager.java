@@ -7,6 +7,7 @@ import java.net.URL;
 public class MusicManager {
     private static MusicManager instance;
     private Clip clip;
+    private String currentlyPlayingPath = "";
 
     private MusicManager() {}
 
@@ -18,12 +19,16 @@ public class MusicManager {
     }
 
     public void playMusic(String path) {
-        stop(); // Stop any currently playing music
+        if (currentlyPlayingPath.equals(path) && clip != null && clip.isRunning()) {
+            return; // Same music already playing, skip
+        }
+
+        stop(); // Stop any previous music
 
         try {
             URL url = getClass().getResource(path);
             if (url == null) {
-                System.err.println("not find audio file: " + path);
+                System.err.println("⚠️ Could not find music file: " + path);
                 return;
             }
 
@@ -31,39 +36,53 @@ public class MusicManager {
             clip = AudioSystem.getClip();
             clip.open(audioIn);
 
-            // Set volume (adjust as needed)
+            // Adjust volume (set to 40% here)
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            float volume = (float) (Math.log(0.4) / Math.log(10) * 40);
+            float volume = (float) (Math.log(0.4) / Math.log(10) * 40);  // ~ -12 dB
             gainControl.setValue(volume);
 
             clip.loop(Clip.LOOP_CONTINUOUSLY);
+            currentlyPlayingPath = path;
+
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
     }
 
     public void stop() {
-        if (clip != null && clip.isRunning()) {
-            clip.stop();
+        if (clip != null) {
+            if (clip.isRunning()) {
+                clip.stop();
+            }
             clip.close();
+            clip = null;
+            currentlyPlayingPath = "";
         }
     }
 
-    // ✅ Universal method name to avoid confusion
+    // Aliases for clarity
     public void stopMusic() {
-        stop(); // internally uses the same logic
+        stop();
     }
 
-    // ✅ Menu convenience methods
     public void playMenuMusic() {
         playMusic("/audio/menu_music.wav");
     }
 
-    public void stopMenuMusic() {
-        stop();
-    }
-
     public void playVictoryMusic() {
         playMusic("/audio/victory_theme.wav");
+    }
+
+    public void playWorldMusic(int world) {
+        String path = switch (world) {
+            case 1 -> "/audio/f1_music.wav";
+            case 2 -> "/audio/f2_music.wav";
+            case 3 -> "/audio/f3_music.wav";
+            default -> null;
+        };
+
+        if (path != null) {
+            playMusic(path);
+        }
     }
 }

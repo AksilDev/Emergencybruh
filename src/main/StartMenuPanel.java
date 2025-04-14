@@ -11,18 +11,20 @@ public class StartMenuPanel extends JPanel {
 
     public StartMenuPanel(MainWindow window) {
         this.window = window;
-
         setPreferredSize(new Dimension(1584, 960));
         setLayout(null);
         setDoubleBuffered(true);
         backgroundGif = new ImageIcon(getClass().getResource("/ui/menu_background.gif"));
 
-        addMenuLabel("PLAY", 690, 605, window::showNamePromptPanel);
+        addMenuLabel("PLAY", 690, 605, () -> {
+            MusicManager.getInstance().stop();
+            window.showNamePromptPanel();
+        });
         addMenuLabel("INFO", 690, 840, window::showDeveloperPanel);
         addMenuLabel("STATS", 120, 840, window::showStatsScreenPanel);
         addMenuLabel("EXIT", 690, 740, () -> System.exit(0));
 
-        MusicManager.getInstance().playMusic("/audio/menu_music.wav");
+        MusicManager.getInstance().playMenuMusic();
     }
 
     private void addMenuLabel(String text, int x, int y, Runnable action) {

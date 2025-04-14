@@ -73,6 +73,7 @@ public abstract class Enemy extends Entity {
         int dx = gp.player.worldX - worldX;
         int dy = gp.player.worldY - worldY;
 
+
         if (Math.abs(dx) > Math.abs(dy)) {
             direction = dx > 0 ? "right" : "left";
             directionNum = dx > 0 ? 3 : 2;
@@ -81,17 +82,48 @@ public abstract class Enemy extends Entity {
             directionNum = dy > 0 ? 0 : 1;
         }
 
+
         collisionOn = false;
         gp.cChecker.checkTile(this);
+
         if (!collisionOn) {
-            switch (direction) {
-                case "up" -> worldY -= speed;
-                case "down" -> worldY += speed;
-                case "left" -> worldX -= speed;
-                case "right" -> worldX += speed;
+            moveInDirection();
+        } else {
+
+            String[] fallbackDirections = {"up", "down", "left", "right"};
+
+            for (String fallback : fallbackDirections) {
+                if (fallback.equals(direction)) continue; // skip current dir
+
+                direction = fallback;
+                directionNum = switch (fallback) {
+                    case "down" -> 0;
+                    case "up" -> 1;
+                    case "left" -> 2;
+                    case "right" -> 3;
+                    default -> directionNum;
+                };
+
+                collisionOn = false;
+                gp.cChecker.checkTile(this);
+
+                if (!collisionOn) {
+                    moveInDirection();
+                    break;
+                }
             }
         }
     }
+
+    private void moveInDirection() {
+        switch (direction) {
+            case "up" -> worldY -= speed;
+            case "down" -> worldY += speed;
+            case "left" -> worldX -= speed;
+            case "right" -> worldX += speed;
+        }
+    }
+
 
     protected void handleAttack() {
         attackTimer++;

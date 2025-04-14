@@ -5,7 +5,6 @@ import object.SuperObject;
 import run.RunManager;
 import tile.TileManager;
 
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,11 +16,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = tileSize * maxScreenRow;
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public int currentWorld = 1;
 
+    public int currentWorld = 1;
     public static final int PLAY_STATE = 0;
     public static final int DEATH_STATE = 1;
     public static final int WIN_STATE = 2;
+    public static final int DIALOGUE_STATE = 3;
     public int gameState = PLAY_STATE;
 
     public TileManager tileM = new TileManager(this);
@@ -34,14 +34,13 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
     public Enemy[] enemies = new Enemy[10];
     public SuperObject[] obj = new SuperObject[20];
-
     public UI ui = new UI(this);
+    public DialogueManager dialogueManager = new DialogueManager(this);
+    public java.util.List<String> currentDialogue;
+
     public boolean hasKey = false;
-
-    Thread gameThread;
-    public Clip worldMusic;
     public long startTime = System.currentTimeMillis();
-
+    private Thread gameThread;
     private MainWindow window;
 
     public GamePanel() {
@@ -52,8 +51,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         startTime = System.currentTimeMillis();
 
-        worldManager.setupWorldContent();      // 🔁 Load initial world content
-        playWorldMusic(currentWorld);          // ✅ Ensure world1 music plays immediately
+        worldManager.loadWorld(currentWorld);
+        MusicManager.getInstance().playWorldMusic(currentWorld);
     }
 
     public void setWindow(MainWindow window) {
@@ -130,7 +129,9 @@ public class GamePanel extends JPanel implements Runnable {
                                     SwingUtilities.invokeLater(() -> window.showVictoryPanel());
                                 }
                             } else {
+                                MusicManager.getInstance().stop(); // stop any old music
                                 worldManager.loadWorld(currentWorld);
+                                MusicManager.getInstance().playWorldMusic(currentWorld);
                             }
                         }
                     }
@@ -154,8 +155,7 @@ public class GamePanel extends JPanel implements Runnable {
             o.draw(g2, o.worldX - player.worldX + player.screenX, o.worldY - player.worldY + player.screenY, tileSize);
         for (Enemy e : enemies) if (e != null) e.draw(g2);
         player.draw(g2);
-        if (gameState == DEATH_STATE) ui.drawDeathScreen(g2);
-        else ui.draw(g2);
+        ui.draw(g2);
         g2.dispose();
     }
 
@@ -163,38 +163,9 @@ public class GamePanel extends JPanel implements Runnable {
         currentWorld = 1;
         hasKey = false;
         player.setDefaultValues();
+        MusicManager.getInstance().stop();
         worldManager.loadWorld(currentWorld);
+        MusicManager.getInstance().playWorldMusic(currentWorld);
         gameState = PLAY_STATE;
-    }
-
-    public void playWorldMusic(int world) {
-        stopWorldMusic();
-        String path = switch (world) {
-            case 1 -> "/audio/f1_music.wav";
-            case 2 -> "/audio/f2_music.wav";
-            case 3 -> "/audio/f3_music.wav";
-            default -> null;
-        };
-
-        if (path == null) return;
-
-        try {
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(getClass().getResource(path));
-            worldMusic = AudioSystem.getClip();
-            worldMusic.open(audioIn);
-            FloatControl gainControl = (FloatControl) worldMusic.getControl(FloatControl.Type.MASTER_GAIN);
-            float volume = (float) (Math.log(0.4) / Math.log(10) * 40);
-            gainControl.setValue(volume);
-            worldMusic.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void stopWorldMusic() {
-        if (worldMusic != null && worldMusic.isRunning()) {
-            worldMusic.stop();
-            worldMusic.close();
-        }
     }
 }

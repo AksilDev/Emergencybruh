@@ -5,6 +5,8 @@ import main.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
+
+
 public class General extends Enemy {
     private final int scale = 3;
 

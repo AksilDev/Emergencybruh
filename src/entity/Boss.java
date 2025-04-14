@@ -1,14 +1,10 @@
 package entity;
-
 import main.GamePanel;
 import main.UtilityTool;
-
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Boss extends Enemy {
-
     public int scale = 3;
 
     public Boss(GamePanel gp, int x, int y) {
@@ -20,7 +16,7 @@ public class Boss extends Enemy {
         maxHP = 20;
         currentHP = maxHP;
         attackDamage = 4;
-        speed = 1;
+        speed = 2;
 
         direction = "down";
         directionNum = 0;
@@ -39,7 +35,7 @@ public class Boss extends Enemy {
     protected BufferedImage[][] loadSpriteSheet(String path, int scale, int cols, int rows) {
         try {
             BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));
-            System.out.println("✅ Loaded sheet successfully from: " + path);
+
 
             BufferedImage[][] frames = new BufferedImage[rows][cols];
             int frameW = sheet.getWidth() / cols;

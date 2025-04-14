@@ -4,7 +4,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-public class UI{
+
+public class UI {
     GamePanel gp;
 
     private BufferedImage heart_full;
@@ -28,48 +29,18 @@ public class UI{
 
     public void draw(Graphics2D g2) {
         drawPlayerLife(g2);
-        int startX = 20;
-        int startY = gp.screenHeight - 40;
 
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Georgia", Font.BOLD, 20));
+        if (gp.gameState == GamePanel.PLAY_STATE) {
+            drawSkillCooldowns(g2);
+        }
 
+        if (gp.gameState == GamePanel.DEATH_STATE) {
+            drawDeathScreen(g2);
+        }
+        if (gp.gameState == GamePanel.DIALOGUE_STATE) {
+            drawDialogueBox(g2, gp.dialogueManager.getCurrentLine());
+        }
 
-        String basicStatus = gp.player.attackHandler.isBasicReady()
-                ? "Ready"
-                : String.format("%.1fs", gp.player.attackHandler.getBasicCooldownRemaining());
-
-        g2.drawString("[J] Basic: " + basicStatus, startX, startY);
-
-//
-        String specialStatus = gp.player.attackHandler.isSpecialReady()
-                ? "Ready"
-                : String.format("%.1fs", gp.player.attackHandler.cooldownRemaining(
-                gp.player.attackHandler.specialCooldownStart, 4000));
-
-        g2.drawString("[K] Special: " + specialStatus, startX + 200, startY);
-
-//
-        String ultStatus = gp.player.attackHandler.isUltimateReady()
-                ? "Ready"
-                : String.format("%.1fs", gp.player.attackHandler.cooldownRemaining(
-                gp.player.attackHandler.ultimateCooldownStart, 8000));
-
-        g2.drawString("[L] Ult: " + ultStatus, startX + 450, startY);
-
-        drawOutlinedText(g2, basicStatus, startX, startY, Color.WHITE, Color.BLACK);
-        drawOutlinedText(g2, specialStatus, startX + 200, startY, Color.WHITE, Color.BLACK);
-        drawOutlinedText(g2, ultStatus, startX + 400, startY, Color.WHITE, Color.BLACK);
-    }
-    public void drawOutlinedText(Graphics2D g2, String text, int x, int y, Color textColor, Color outlineColor) {
-        g2.setColor(outlineColor);
-        g2.drawString(text, x - 1, y);
-        g2.drawString(text, x + 1, y);
-        g2.drawString(text, x, y - 1);
-        g2.drawString(text, x, y + 1);
-
-        g2.setColor(textColor);
-        g2.drawString(text, x, y);
     }
 
     private void drawPlayerLife(Graphics2D g2) {
@@ -110,22 +81,64 @@ public class UI{
         g2.drawString(text, x, y);
     }
 
-//    public void drawSkillCooldowns(Graphics2D g2) {
-//        g2.setFont(new Font("Arial", Font.PLAIN, 20));
-//        g2.setColor(Color.WHITE);
-//        int x = 20;
-//        int y = gp.screenHeight - 40;
-//
-//        float specialCD = gp.player.attackHandler.cooldownRemaining(gp.player.attackHandler.specialCooldownStart, 4000);
-//        float ultCD = gp.player.attackHandler.cooldownRemaining(gp.player.attackHandler.ultimateCooldownStart, 8000);
-//
-//        String j = "[J] Basic";
-//        String k = "[K] Special: " + (specialCD <= 0 ? "Ready" : String.format("%.1fs", specialCD));
-//        String l = "[L] Ult: " + (ultCD <= 0 ? "Ready" : String.format("%.1fs", ultCD));
-//
-//        g2.drawString(j, x, y);
-//        g2.drawString(k, x + 140, y);
-//        g2.drawString(l, x + 360, y);
-//    }
+    public void drawSkillCooldowns(Graphics2D g2) {
+        Font font = new Font("Arial", Font.BOLD, 16);
+        g2.setFont(font);
+
+        int startX = 20;
+        int startY = gp.screenHeight - 40;
+
+        // Basic Attack
+        String basicStatus = gp.player.attackHandler.isBasicReady()
+                ? "Ready"
+                : String.format("%.1fs", gp.player.attackHandler.getBasicCooldownRemaining());
+        String basic = "[J] Basic: " + basicStatus;
+
+        // Special
+        float specialCD = gp.player.attackHandler.cooldownRemaining(
+                gp.player.attackHandler.specialCooldownStart, 4000);
+        String special = "[K] Special: " + (specialCD <= 0 ? "Ready" : String.format("%.1fs", specialCD));
+
+        // Ultimate
+        float ultCD = gp.player.attackHandler.cooldownRemaining(
+                gp.player.attackHandler.ultimateCooldownStart, 8000);
+        String ult = "[L] Ult: " + (ultCD <= 0 ? "Ready" : String.format("%.1fs", ultCD));
+
+        drawOutlinedText(g2, basic, startX, startY, Color.WHITE, Color.BLACK);
+        drawOutlinedText(g2, special, startX + 200, startY, Color.WHITE, Color.BLACK);
+        drawOutlinedText(g2, ult, startX + 400, startY, Color.WHITE, Color.BLACK);
+    }
+
+    public void drawOutlinedText(Graphics2D g2, String text, int x, int y, Color textColor, Color outlineColor) {
+        g2.setColor(outlineColor);
+        g2.drawString(text, x - 1, y);
+        g2.drawString(text, x + 1, y);
+        g2.drawString(text, x, y - 1);
+        g2.drawString(text, x, y + 1);
+
+        g2.setColor(textColor);
+        g2.drawString(text, x, y);
+    }
+
+    public void drawDialogueBox(Graphics2D g2, String text) {
+        int boxWidth = gp.screenWidth - 100;
+        int boxHeight = 100;
+        int x = 50;
+        int y = gp.screenHeight - boxHeight - 50;
+
+        // Background
+        g2.setColor(Color.BLACK);
+        g2.fillRoundRect(x, y, boxWidth, boxHeight, 15, 15);
+
+        // Border
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(x, y, boxWidth, boxHeight, 15, 15);
+
+        // Text
+        g2.setFont(new Font("Monospaced", Font.PLAIN, 20));
+        g2.setColor(Color.WHITE);
+        g2.drawString("* " + text, x + 20, y + 40);
+    }
 
 }

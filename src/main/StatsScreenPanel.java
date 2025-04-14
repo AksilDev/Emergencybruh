@@ -42,7 +42,7 @@ public class StatsScreenPanel extends JPanel {
         returnLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                MusicManager.getInstance().stopMenuMusic(); // optional
+                MusicManager.getInstance().stopMusic();
                 window.showStartMenu();
             }
         });

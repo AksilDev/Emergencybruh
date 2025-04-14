@@ -21,7 +21,7 @@ public class MainWindow extends JFrame {
     }
 
     public void showStartMenu() {
-        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
+        MusicManager.getInstance().stopMusic();
         startMenuPanel = new StartMenuPanel(this);
         setContentPane(startMenuPanel);
         revalidate();
@@ -29,7 +29,7 @@ public class MainWindow extends JFrame {
     }
 
     public void showDeveloperPanel() {
-        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
+        MusicManager.getInstance().stopMusic();
         setContentPane(new DeveloperPanel(this));
         revalidate();
         repaint();
@@ -42,14 +42,14 @@ public class MainWindow extends JFrame {
     }
 
     public void showStatsScreenPanel() {
-        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
+        MusicManager.getInstance().stopMusic();
         setContentPane(new StatsScreenPanel(this));
         revalidate();
         repaint();
     }
 
     public void startGame() {
-        MusicManager.getInstance().stopMenuMusic();  // 🔄 updated
+        MusicManager.getInstance().stopMusic();
 
         gamePanel = new GamePanel();
         gamePanel.setWindow(this);
@@ -71,7 +71,8 @@ public class MainWindow extends JFrame {
 
     public void stopGameMusic() {
         if (gamePanel != null) {
-            gamePanel.stopWorldMusic();
+            MusicManager.getInstance().stopMusic();
+
         }
     }
 }

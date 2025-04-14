@@ -1,8 +1,6 @@
 package main;
 
-import entity.Boss;
-import entity.General;
-import entity.Goblin;
+
 import object.OBJ_Key;
 import object.OBJ_Portal;
 
@@ -42,12 +40,12 @@ public class WorldManager {
 
     private void setupWorld2() {
         gp.obj[1] = new OBJ_Key(gp);
-        gp.obj[1].worldX = 46 * gp.tileSize;
+        gp.obj[1].worldX = 41 * gp.tileSize;
         gp.obj[1].worldY = 23 * gp.tileSize;
 
         gp.obj[2] = new OBJ_Portal(gp);
         gp.obj[2].worldX = 48 * gp.tileSize;
-        gp.obj[2].worldY = 23 * gp.tileSize;
+        gp.obj[2].worldY = 25 * gp.tileSize;
     }
 
     private void setupWorld3() {
@@ -62,7 +60,9 @@ public class WorldManager {
     public void loadWorld(int worldNum) {
         gp.currentWorld = worldNum;
         setupWorldContent();
-        gp.playWorldMusic(gp.currentWorld);
+        MusicManager.getInstance().playWorldMusic(gp.currentWorld);
+        gp.dialogueManager.startDialogue(worldNum); //
     }
+
 
 }
