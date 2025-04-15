@@ -64,7 +64,7 @@ public class PlayerAttack {
                 player.usingUltimate = false;
                 player.alreadyHit = false;
 
-                // ✅ Start cooldown if it was a basic attack
+
                 if (!player.usingSpecial && !player.usingUltimate) {
                     basicOnCooldown = true;
                 }
@@ -127,8 +127,7 @@ public class PlayerAttack {
     }
 
     public void startAttack() {
-        if (basicOnCooldown) return; // ⛔ Block attack if still cooling down
-
+        if (basicOnCooldown) return; //
         player.attacking = true;
         player.attackFrameIndex = 0;
         player.attackTimer = 0;

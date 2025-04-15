@@ -1,5 +1,5 @@
 Tarnished,59.62,10
-a,85.155,6
-a,87.889,8
-Ryzen,99.221,4
-SIR KAI,112.419,2
+Sekiro,63.111,9
+ImGroot,83.941,10
+PureChaos,85.155,6
+JudgeJury,87.889,8

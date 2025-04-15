@@ -28,7 +28,7 @@ public class MusicManager {
         try {
             URL url = getClass().getResource(path);
             if (url == null) {
-                System.err.println("⚠️ Could not find music file: " + path);
+                System.err.println("⚠Couldnt find music file: " + path);
                 return;
             }
 

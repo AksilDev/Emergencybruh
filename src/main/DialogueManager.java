@@ -15,7 +15,7 @@ public class DialogueManager {
 
     private void preloadDialogues() {
         dialogues.put(1, new ArrayList<>(java.util.List.of(
-                "Ryzen: \"Look at this place, a miserable den. Let's finish this swiftly.\"",
+                "Ryzen: \"Look at this place, a miserable den. Let's finish this swiftly. \"",
                 "Krikk: \"I smell Orc blood! Fresh and warm... my brothers, prepare for feast!\""
         )));
         dialogues.put(2, new ArrayList<>(java.util.List.of(

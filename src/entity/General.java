@@ -36,7 +36,7 @@ public class General extends Enemy {
         attackFrames = loadSpriteSheet(attackPath, gp.tileSize * scale, 9, 4);
     }
 
-    // ✅ This method was missing! Paste this exactly here:
+
     protected BufferedImage[][] loadSpriteSheet(String path, int scale, int cols, int rows) {
         try {
             BufferedImage sheet = ImageIO.read(getClass().getResourceAsStream(path));

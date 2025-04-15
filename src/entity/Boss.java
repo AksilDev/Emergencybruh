@@ -51,7 +51,7 @@ public class Boss extends Enemy {
             return frames;
 
         } catch (Exception e) {
-            System.err.println("❌ Failed loading sprite from path: " + path);
+            System.err.println(" Failed loading sprite from path: " + path);
             e.printStackTrace();
             return new BufferedImage[0][0];
         }

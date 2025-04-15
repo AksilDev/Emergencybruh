@@ -35,7 +35,7 @@ public class VictoryPanel extends JPanel {
         JLabel exitBtn = new JLabel("EXIT");
         exitBtn.setFont(new Font("Georgia", Font.BOLD, 32));
         exitBtn.setForeground(Color.WHITE);
-        exitBtn.setBounds(740, 810, 150, 40);
+        exitBtn.setBounds(745, 805, 150, 40);
         exitBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         exitBtn.addMouseListener(new MouseAdapter() {
             @Override

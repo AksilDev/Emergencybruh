@@ -24,7 +24,7 @@ public class Goblin extends Enemy {
         directionNum = 0;
 
         loadSprites("/enemies/gob1_walk.png", "/enemies/gob1_attack.png");
-        // No hurt or death animations for goblin
+
     }
 
     @Override
